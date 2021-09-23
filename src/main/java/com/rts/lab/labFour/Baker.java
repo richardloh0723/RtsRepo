@@ -14,6 +14,8 @@ public class Baker implements Runnable {
 
     private final Object coolingRackLock;
 
+    private boolean alive = true;
+
     @Override
     public void run() {
         try{
@@ -29,16 +31,19 @@ public class Baker implements Runnable {
      * a rate of 12 every 5 seconds.
      */
     public void programOven() throws InterruptedException {
-        System.out.println("Baking bun!");
-        while(true) {
+        System.out.println("Baker: Baking bun!");
+        while(alive) {
             synchronized(ovenLock) {
                 while(bakery.getOvenBunAmount() == 0) {
                     // baker wait for the oven to bake the dough
+                    System.out.println("Baker: Waiting for oven..");
                     ovenLock.wait();
                 }
+                System.out.println("Baker: Take from oven..");
                 bakery.setOvenBunAmount(bakery.getOvenBunAmount()-12);
                 // baker reprogram the oven after taking fresh buns
                 // from the oven
+                System.out.println("Baker: Reprogram the oven.");
                 ovenLock.notify();
             }
             // baker will become producer of cooling rack bun.
@@ -48,11 +53,14 @@ public class Baker implements Runnable {
                 while(bakery.getCoolingRackBunAmount() == COOLING_RACK_BUN_LIMIT) {
                     // baker will wait for the cooling rack when rack
                     // is full of buns (18 buns)
+                    System.out.println("Baker: Cooling rack is full. Waiting.");
                     coolingRackLock.wait();
                 }
                 bakery.setCoolingRackBunAmount(bakery.getCoolingRackBunAmount()+12);
                 // baker to notify worker when the bun is ready
-                // iff bun > 0. else it has no purpose
+                // iff bun > 0.
+                // else this statement will not do anything. (useless)
+                System.out.println("Baker: Cooling rack is filled!");
                 coolingRackLock.notify();
 
             }
@@ -63,5 +71,9 @@ public class Baker implements Runnable {
         this.bakery = bakery;
         ovenLock = bakery.getOvenLock();
         coolingRackLock = bakery.getCoolingRackLock();
+    }
+
+    public void setAlive(boolean alive) {
+        this.alive = alive;
     }
 }

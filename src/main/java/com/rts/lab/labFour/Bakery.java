@@ -61,13 +61,5 @@ public class Bakery{
         this.shelfBunAmount = shelfBunAmount;
     }
 
-    public boolean getIsClosed() {
-        return isClosed;
-    }
-
-    public void setIsClosed(boolean isClosed) {
-        this.isClosed = isClosed;
-    }
-
 
 }

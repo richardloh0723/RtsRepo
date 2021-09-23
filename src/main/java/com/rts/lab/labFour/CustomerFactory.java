@@ -10,7 +10,9 @@ import java.util.List;
  * fairness
  */
 public class CustomerFactory implements Runnable {
+    private Bakery bakery;
     private List<Customer> customers = new ArrayList<>();
+    private boolean alive;
     private final String[] customerNames = {"Alan","Lisa","Josh","Katie","Jeff","Alfie","Roy","Jones","Jenny","Richard","Steve",
     "Caleb","Rubini","Justin","Bieber","Axelsen","Chen Long"};
     @Override
@@ -19,14 +21,26 @@ public class CustomerFactory implements Runnable {
     }
 
     public void generateCustomer() {
-        while(true) {
-            for (String customerName:customerNames) {
-                Customer customer = new Customer();
-                Thread customerThread = new Thread(customer, customerName);
-                //18/9/2021: until here.
-                customers.add(customer);
-            }
+        while(alive) {
+            try {
+                Thread.sleep(500);
+                for (String customerName : customerNames) {
+                    Customer customer = new Customer(bakery, customers);
+                    Thread customerThread = new Thread(customer, customerName);
+                    //18/9/2021: until here.
+                    customers.add(customer);
+                    customerThread.start();
+                }
+            }catch(InterruptedException e) {}
         }
+    }
+
+    public CustomerFactory(Bakery bakery) {
+        this.bakery = bakery;
+    }
+
+    public void setAlive(boolean alive) {
+        this.alive = alive;
     }
 
 }

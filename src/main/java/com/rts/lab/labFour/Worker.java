@@ -9,8 +9,7 @@ public class Worker implements Runnable {
     private Bakery bakery;
     private final Object coolingRackLock;
     private final Object shelfLock;
-    private static final int SHELF_BUN_LIMIT = 10;
-    private int shelfBunAmt = 0;
+    private boolean alive;
     @Override
     public void run() {
         try {
@@ -31,7 +30,7 @@ public class Worker implements Runnable {
      * 2. worker places the buns to the gondola
      */
     public void execute() throws InterruptedException{
-        while(true) {
+        while(alive) {
             takeBunFromCoolingRack();
             placeBunToShelf();
         }
@@ -48,11 +47,13 @@ public class Worker implements Runnable {
                  * Worker will sleep if there is no bun on the
                  * cooling rack
                  */
+                System.out.println("Worker: Waiting the cooling rack to fill up");
                 coolingRackLock.wait();
             }
             // Removes 4 buns per 1000ms from cooling rack
             // and place it to shelf
             Thread.sleep(1000);
+            System.out.println("Worker: Remove cool buns..");
             bakery.setCoolingRackBunAmount(bakery.getCoolingRackBunAmount()-4);
             // condition: when cooling rack reaches 18 buns and after worker took it,
             // notifying baker is needed to let him continue his job.
@@ -70,12 +71,18 @@ public class Worker implements Runnable {
                 // when the shelf reaches the maximum amount (10),
                 // wait for customer to notify that the shelf
                 // has got place.
+                System.out.println("Worker: Shelf bun is full! Waiting..");
                 shelfLock.wait();
             }
+            System.out.println("Worker: Added buns to shelf..");
             bakery.setShelfBunAmount(bakery.getShelfBunAmount()+4);
             // situations when shelf == 0, notify customer that
             // the shelf is filled
             shelfLock.notify();
         }
+    }
+
+    public void setAlive(boolean alive) {
+        this.alive = alive;
     }
 }
