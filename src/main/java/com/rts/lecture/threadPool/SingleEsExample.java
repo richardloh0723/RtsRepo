@@ -6,7 +6,7 @@ import java.util.concurrent.Executors;
 executors: assignment is used
  */
 
-public class ExecService {
+public class SingleEsExample {
     /**
      Explain different types of executors
      */
