@@ -1,2 +1,3 @@
 JMH S 30 com.rts.concurrent.Concurrent1 S 57 com.rts.concurrent.jmh_generated.Concurrent1_test_jmhTest S 4 test S 10 Throughput E A 1 1 1 E I 1 1 E E I 1 3 E E I 1 1 E E E E E E U 12 MILLISECONDS E T 4 30 s 
+JMH S 21 com.rts.knn.main.Main S 48 com.rts.knn.main.jmh_generated.Main_test_jmhTest S 4 test S 11 AverageTime E A 1 1 1 E E E E I 1 1 E E I 1 1 E E E E E E U 7 SECONDS E T 4 30 s 
 JMH S 29 com.rts.lab.matrix.Sequential S 56 com.rts.lab.matrix.jmh_generated.Sequential_test_jmhTest S 4 test S 11 AverageTime E A 1 1 1 E E E E I 1 1 E E I 1 1 E E E E E E U 7 SECONDS E T 4 30 s 
