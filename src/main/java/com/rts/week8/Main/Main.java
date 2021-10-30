@@ -21,26 +21,26 @@ import java.util.concurrent.TimeUnit;
  * @author emran
  */
 public class Main {
-	// Benchmark annotation
-	@Benchmark
-// Change benchmark test to throughput
-	@BenchmarkMode(Mode.AverageTime)
-// Specifies the number of iteration
-	@Measurement(iterations = 1)
-	@Fork(1)
-	@Timeout(time = 30)
-	@OutputTimeUnit(TimeUnit.SECONDS)
-	public void test() throws ExecutionException, InterruptedException {
-//	public static void main(String[] args) throws InterruptedException, ExecutionException {
+//	// Benchmark annotation
+//	@Benchmark
+//// Change benchmark test to throughput
+//	@BenchmarkMode(Mode.AverageTime)
+//// Specifies the number of iteration
+//	@Measurement(iterations = 1)
+//	@Fork(1)
+//	@Timeout(time = 30)
+//	@OutputTimeUnit(TimeUnit.SECONDS)
+//	public void test() throws ExecutionException, InterruptedException {
+	public static void main(String[] args) throws InterruptedException, ExecutionException {
 		Date startTime, endTime;
 		List<String> dictionary= WordsLoader.load("UKAdvancedCrypticsDictionary.txt");
-		
+
 		System.out.println("Dictionary Size: "+dictionary.size());
-		
+
 		startTime=new Date();
-		
+
 		String word="gro";
-                
+
 		BestMatchingData result = BestMatchingConcurrentCalculation.getBestMatchingWords(word, dictionary);
 		List<String> results=result.getWords();
 		endTime=new Date();

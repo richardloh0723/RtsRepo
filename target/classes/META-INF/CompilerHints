@@ -3,4 +3,5 @@ dontinline,*.*_avgt_jmhStub
 dontinline,*.*_sample_jmhStub
 dontinline,*.*_ss_jmhStub
 dontinline,*.*_thrpt_jmhStub
-inline,com/rts/week8/Main/Main.test
+inline,com/rts/week10/ConcurrentVersion/ConcurrentMain.test
+inline,com/rts/week10/ExecutorsVersion/ExecutorMain.test

@@ -1,24 +1,24 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package com.rts.knn.main;
-
-import com.rts.knn.data.BankMarketing;
-import com.rts.knn.loader.BankMarketingLoader;
-import com.rts.knn.sequential.KnnClassifier;
-import org.openjdk.jmh.annotations.*;
-
-import java.util.Date;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
-/**
- *
- * @author emran
- */
-public class Main {
+///*
+// * To change this license header, choose License Headers in Project Properties.
+// * To change this template file, choose Tools | Templates
+// * and open the template in the editor.
+// */
+//package com.rts.knn.main;
+//
+//import com.rts.knn.data.BankMarketing;
+//import com.rts.knn.loader.BankMarketingLoader;
+//import com.rts.knn.sequential.KnnClassifier;
+//import org.openjdk.jmh.annotations.*;
+//
+//import java.util.Date;
+//import java.util.List;
+//import java.util.concurrent.TimeUnit;
+//
+///**
+// *
+// * @author emran
+// */
+//public class Main {
 //// Benchmark annotation
 //@Benchmark
 //// Change benchmark test to throughput
@@ -74,6 +74,6 @@ public class Main {
 //			+ " seconds.");
 //	System.out.println("******************************************");
 //
-//	//}
-}
-
+//	}
+//}
+//

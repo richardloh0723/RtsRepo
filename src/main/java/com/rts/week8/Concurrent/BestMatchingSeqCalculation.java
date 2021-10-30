@@ -34,10 +34,6 @@ public static BestMatchingData getBestMatchingWords(String word, List<String> di
 			}
 		}
 
-               
-                
-                
-		
 		BestMatchingData result=new BestMatchingData();
 		result.setWords(results);
 		result.setDistance(minDistance);

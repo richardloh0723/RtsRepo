@@ -1,1 +1,3 @@
-JMH S 23 com.rts.week8.Main.Main S 50 com.rts.week8.Main.jmh_generated.Main_test_jmhTest S 4 test S 11 AverageTime E A 1 1 1 E E E E I 1 1 E E I 1 1 E E E E E E U 7 SECONDS E T 4 30 s 
+JMH S 47 com.rts.week10.ConcurrentVersion.ConcurrentMain S 74 com.rts.week10.ConcurrentVersion.jmh_generated.ConcurrentMain_test_jmhTest S 4 test S 11 AverageTime E A 1 1 1 E E E E I 1 1 E E I 1 1 E E E E E E U 7 SECONDS E T 4 30 s 
+JMH S 44 com.rts.week10.ExecutorsVersion.ExecutorMain S 71 com.rts.week10.ExecutorsVersion.jmh_generated.ExecutorMain_test_jmhTest S 4 test S 11 AverageTime E A 1 1 1 E E E E I 1 1 E E I 1 1 E E E E E E U 7 SECONDS E T 4 30 s 
+JMH S 47 com.rts.week10.SequentialVersion.SequentialMain S 74 com.rts.week10.SequentialVersion.jmh_generated.SequentialMain_test_jmhTest S 4 test S 11 AverageTime E A 1 1 1 E E E E I 1 1 E E I 1 1 E E E E E E U 7 SECONDS E T 4 30 s 
