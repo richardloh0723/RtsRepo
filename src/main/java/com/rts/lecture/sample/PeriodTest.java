@@ -13,9 +13,8 @@ public class PeriodTest {
                 System.out.println("running");
                 al.incrementAndGet();
             }
-        }, 2, 1, TimeUnit.SECONDS);
+        }, 0, 1, TimeUnit.SECONDS);
         System.out.println("task scheduled");
-        Thread.sleep(scheduleFuture.getDelay(TimeUnit.MILLISECONDS));
         while (true) {
             //System.out.println(scheduleFuture.isDone()); will always print false
             Thread.sleep(800);

@@ -28,3 +28,20 @@ class Task implements Callable {
     }
 
 }
+
+class coolingRodsTask implements Callable<Boolean> {
+    public Boolean call() throws Exception {
+        return deployRods();
+    }
+    public Boolean deployRods() throws InterruptedException {
+        System.out.println("cooling.");
+        Thread.sleep(500);
+        System.out.println("cooling complete.");
+        return true;
+    }
+}
+
+
+
+
+

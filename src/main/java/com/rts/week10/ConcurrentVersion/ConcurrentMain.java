@@ -26,14 +26,14 @@ import java.util.stream.Collectors;
  * @author emran
  */
 public class ConcurrentMain {
-	@Benchmark
-// Change benchmark test to throughput
-	@BenchmarkMode(Mode.AverageTime)
-// Specifies the number of iteration
-	@Measurement(iterations = 1)
-	@Fork(1)
-	@Timeout(time = 30)
-	@OutputTimeUnit(TimeUnit.SECONDS)
+//	@Benchmark
+//// Change benchmark test to throughput
+//	@BenchmarkMode(Mode.AverageTime)
+//// Specifies the number of iteration
+//	@Measurement(iterations = 1)
+//	@Fork(1)
+//	@Timeout(time = 30)
+//	@OutputTimeUnit(TimeUnit.SECONDS)
 	public void test() throws IOException {
 	//public static void main(String[] args) throws IOException {
 
