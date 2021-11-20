@@ -74,7 +74,7 @@ public class ApAlgorithm {
 		log("Found " + nbFrequentSets + " frequents sets for support " + (minSup * 100) + "% (absolute "
 				+ Math.round(numTransactions * minSup) + ")");
 		log("Done");
-		Lister();
+		//Lister();
 	}
 
 	/** triggers actions if a frequent item set has been found */
@@ -302,11 +302,6 @@ public class ApAlgorithm {
 
 		// new candidates are only the frequent candidates
 		itemsets = frequentCandidates;
-		for(int[] testing : frequentCandidates) {
-			for(int test : testing) {
-				System.out.println("Richard Loh: " + test);
-			}
-		}
 	}
 
 	public static void Lister() {

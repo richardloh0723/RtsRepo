@@ -1,9 +1,6 @@
 package com.assignment.concurrent;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileReader;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.*;
 
 public class ApAlgorithm {
@@ -15,19 +12,22 @@ public class ApAlgorithm {
 	private double minimumConfidence;
 	private List<String> frequentItemSetsList = new ArrayList<String>();
 
+	// modified
+	private List<int[]> datFileCandidates;
+	long start;
+
 	/**
 	 * generates the apriori itemsets from a file
 	 * @throws Exception
 	 */
 	public ApAlgorithm() throws Exception {
 		// configuring the settings
+		start = System.currentTimeMillis();
 		configure();
 		go();
 	}
 
 	private void go() throws Exception {
-		// initialize timer
-		long start = System.currentTimeMillis();
 
 		/*
 		First, we are required to generate K=1 frequent itemsets candidate
@@ -91,19 +91,15 @@ public class ApAlgorithm {
 		totalNumOfDistinctItems = 0;
 		// total number of transactions
 		totalNumOfTransactions = 0;
-		BufferedReader data_in = new BufferedReader(new FileReader(transactionFileName));
-		while (data_in.ready()) {
-			String line = data_in.readLine();
-			if (line.matches("\\s*"))
-				continue; // ignore when its empty lines
-			totalNumOfTransactions++;
-			StringTokenizer t = new StringTokenizer(line, " ");
-			while (t.hasMoreTokens()) {
-				int x = Integer.parseInt(t.nextToken());
-				if (x + 1 > totalNumOfDistinctItems)
-					totalNumOfDistinctItems = x + 1;
-			}
-		}
+		datFileCandidates = convertDatFileToTransactionsList(new ArrayList<>(), transactionFileName);
+//		BufferedReader data_in = new BufferedReader(new FileReader(transactionFileName));
+//		while (data_in.ready()) {
+//			String line = data_in.readLine();
+//			if (line.matches("\\s*"))
+//				continue; // ignore when its empty lines
+//			totalNumOfTransactions++;
+//			StringTokenizer t = new StringTokenizer(line, " ");
+//		}
 
 		outputConfig();
 
@@ -203,14 +199,22 @@ public class ApAlgorithm {
 	/*
 	If the item is existed, then the element will become true
 	else if the item is not exist, then the element will become false
-	 */
-	private boolean[] identifyIsItemExist(String line, boolean[] boolListIsItemExist) {
-		Arrays.fill(boolListIsItemExist, false);
-		StringTokenizer stringTokenizer = new StringTokenizer(line, " "); // read a line from the file to the tokenizer
-		// put the line contents into the transaction array
-		while (stringTokenizer.hasMoreTokens()) {
-			int parsedVal = Integer.parseInt(stringTokenizer.nextToken());
-			boolListIsItemExist[parsedVal] = true; // if it is not a 0, assign the value to true
+//	 */
+//	private boolean[] identifyIsItemExist(String line, boolean[] boolListIsItemExist) {
+//		Arrays.fill(boolListIsItemExist, false);
+//		StringTokenizer stringTokenizer = new StringTokenizer(line, " "); // read a line from the file to the tokenizer
+//		// put the line contents into the transaction array
+//		while (stringTokenizer.hasMoreTokens()) {
+//			int parsedVal = Integer.parseInt(stringTokenizer.nextToken());
+//			boolListIsItemExist[parsedVal] = true; // if it is not a 0, assign the value to true
+//		}
+//		return boolListIsItemExist;
+//	}
+
+	private boolean[] identifyIsItemExist(int[] transaction, boolean[] boolListIsItemExist) {
+		Arrays.fill(boolListIsItemExist,false);
+		for(int element : transaction) {
+			boolListIsItemExist[element] = true;
 		}
 		return boolListIsItemExist;
 	}
@@ -236,15 +240,20 @@ public class ApAlgorithm {
 		// the number of successful matches, initialized by zeros
 		int count[] = new int[listOfCurrentItemSets.size()];
 
-		// load the transaction file
-		BufferedReader data_in = new BufferedReader(new InputStreamReader(new FileInputStream(transactionFileName)));
-
 		boolean[] boolListIsItemExist = new boolean[totalNumOfDistinctItems];
 
 		// for each transaction
+		/*
+		modification 1: the current process of continuously reading the file is inefficient.
+		Therefore, each line could be stored inside an integer array (heap) called
+		datFileCandidates
+		 */
+		/*
+		idea: split the iteration of totalNumOfTransactions to different threads to process
+		 */
 		for (int i = 0; i < totalNumOfTransactions; i++) {
-			String line = data_in.readLine();
-			boolListIsItemExist = identifyIsItemExist(line, boolListIsItemExist);
+			//System.out.println("RICHARD " + Arrays.toString(datFileCandidates.get(i)) + i + " time");
+			boolListIsItemExist = identifyIsItemExist(datFileCandidates.get(i), boolListIsItemExist);
 
 			// check each candidate
 			for (int j = 0; j < listOfCurrentItemSets.size(); j++) {
@@ -271,8 +280,6 @@ public class ApAlgorithm {
 			}
 
 		}
-
-		data_in.close();
 		/*
 			Second part: see if the living candidates could satisfy the determined
 			minimum support. (default: 60%)
@@ -287,6 +294,7 @@ public class ApAlgorithm {
 		}
 
 		// new candidates are only the frequent candidates
+		// that has passed the filtration/pruning process.
 		listOfCurrentItemSets = frequentCandidates;
 	}
 
@@ -352,5 +360,39 @@ public class ApAlgorithm {
 			}
 		}
 		return 0;
+	}
+
+	public List<int[]> convertDatFileToTransactionsList(List<int[]> frequentSets, String transactionFileName)
+			throws FileNotFoundException {
+		Scanner file = new Scanner(new File(transactionFileName));
+		int[] newRay = null;
+		/*
+		has two jobs, one is to grab the data from .dat file
+		to ArrayList for faster I/O
+		2. to calculate the distinct frequent sets
+		 */
+		while (file.hasNext()) {
+			String line = file.nextLine();
+			String[] str = line.split("\\s+");
+			newRay = new int[str.length];
+			for (int i = 0; i < str.length; i++) {
+				newRay[i] = Integer.valueOf(str[i]);
+			}
+			frequentSets.add(newRay);
+			totalNumOfTransactions++;
+		}
+//		while (t.hasMoreTokens()) {
+//			int x = Integer.parseInt(t.nextToken());
+//			if (x + 1 > totalNumOfDistinctItems)
+//				totalNumOfDistinctItems = x + 1;
+//		}
+		for(int[] candidate : frequentSets) {
+			for(int element : candidate) {
+				if (element + 1 > totalNumOfDistinctItems) {
+					totalNumOfDistinctItems = element + 1;
+				}
+			}
+		}
+		return frequentSets;
 	}
 }

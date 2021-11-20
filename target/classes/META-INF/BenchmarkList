@@ -1,0 +1,2 @@
+JMH S 30 com.assignment.concurrent.main S 57 com.assignment.concurrent.jmh_generated.main_test_jmhTest S 4 test S 11 AverageTime E A 1 1 1 E E E E I 1 1 E E I 1 1 E E E E E E U 7 SECONDS E T 4 30 s 
+JMH S 30 com.assignment.sequential.main S 57 com.assignment.sequential.jmh_generated.main_test_jmhTest S 4 test S 11 AverageTime E A 1 1 1 E E E E I 1 1 E E I 1 1 E E E E E E U 7 SECONDS E T 4 30 s 
