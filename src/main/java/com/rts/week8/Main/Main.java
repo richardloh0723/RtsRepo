@@ -5,16 +5,13 @@
  */
 package com.rts.week8.Main;
 
-import com.rts.week8.Concurrent.BestMatchingSeqCalculation;
 import com.rts.week8.Data.WordsLoader;
-import com.rts.week8.Sequential.BestMatchingConcurrentCalculation;
+import com.rts.week8.ConcurrentCode.BestMatchingConcurrentCalculation;
 import com.rts.week8.Shared.BestMatchingData;
-import org.openjdk.jmh.annotations.*;
 
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 
 /**
  *
