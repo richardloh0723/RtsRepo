@@ -42,12 +42,10 @@ public class ApAlgorithm {
 		while (listOfCurrentItemSets.size() > 0) {
 			// potential: method to start frequent itemSets calculation
 			calculateFrequentItemsets();
-			if (listOfCurrentItemSets.size() != 0) {
-				frequentSetsTotal += listOfCurrentItemSets.size();
-				log("Found " + listOfCurrentItemSets.size() + " frequent itemsets of size " + itemSetsTotal + " (with support "
-						+ (minimumSupport * 100) + "%)");
-				createNewItemsetsFromPreviousOnes();
-			}
+			frequentSetsTotal += listOfCurrentItemSets.size();
+			log("Found " + listOfCurrentItemSets.size() + " frequent itemsets of size " + itemSetsTotal + " (with support "
+					+ (minimumSupport * 100) + "%)");
+			createNewItemsetsFromPreviousOnes();
 			itemSetsTotal++;
 		}
 
@@ -201,69 +199,84 @@ public class ApAlgorithm {
 
 	}
 
-	/** put "true" in trans[i] if the integer i is in line */
-	private void line2booleanArray(String line, boolean[] trans) {
-		Arrays.fill(trans, false);
-		StringTokenizer stFile = new StringTokenizer(line, " "); // read a line from the file to the tokenizer
-		// put the contents of that line into the transaction array
-		while (stFile.hasMoreTokens()) {
-
-			int parsedVal = Integer.parseInt(stFile.nextToken());
-			trans[parsedVal] = true; // if it is not a 0, assign the value to true
+	/* put "true" in boolListIsItemExist[i] if the integer i is inside the line */
+	/*
+	If the item is existed, then the element will become true
+	else if the item is not exist, then the element will become false
+	 */
+	private boolean[] identifyIsItemExist(String line, boolean[] boolListIsItemExist) {
+		Arrays.fill(boolListIsItemExist, false);
+		StringTokenizer stringTokenizer = new StringTokenizer(line, " "); // read a line from the file to the tokenizer
+		// put the line contents into the transaction array
+		while (stringTokenizer.hasMoreTokens()) {
+			int parsedVal = Integer.parseInt(stringTokenizer.nextToken());
+			boolListIsItemExist[parsedVal] = true; // if it is not a 0, assign the value to true
 		}
+		return boolListIsItemExist;
 	}
 
 	/**
 	 * passes through the data to measure the frequency of sets in listOfCurrentItemSets
-	 * then filters thoses who are under the minimum support (minSup)
+	 * then filter those that are under the minimum support (minSup)
 	 */
 	private void calculateFrequentItemsets() throws Exception {
-
+		/*
+			first part: scan through all the transactions to see if it is containing
+			the desired candidates
+		 */
 		log("Passing through the data to compute the frequency of " + listOfCurrentItemSets.size() + " itemsets of size "
 				+ listOfCurrentItemSets.get(0).length);
 
-		List<int[]> frequentCandidates = new ArrayList<int[]>(); // the frequent candidates for the current itemset
+		// Instantiate an ArrayList to put found frequent candidates to the list<int[]>
+		List<int[]> frequentCandidates = new ArrayList<>();
 
-		boolean match; // whether the transaction has all the items in an itemset
-		int count[] = new int[listOfCurrentItemSets.size()]; // the number of successful matches, initialized by zeros
+		// whether the transaction has all the items in the itemSet
+		boolean transactionIsMatchedWithCandidate;
+
+		// the number of successful matches, initialized by zeros
+		int count[] = new int[listOfCurrentItemSets.size()];
 
 		// load the transaction file
 		BufferedReader data_in = new BufferedReader(new InputStreamReader(new FileInputStream(transactionFileName)));
 
-		boolean[] trans = new boolean[totalNumOfDistinctItems];
+		boolean[] boolListIsItemExist = new boolean[totalNumOfDistinctItems];
 
 		// for each transaction
 		for (int i = 0; i < totalNumOfTransactions; i++) {
-
-			// boolean[] trans = extractEncoding1(data_in.readLine());
 			String line = data_in.readLine();
-			line2booleanArray(line, trans);
+			boolListIsItemExist = identifyIsItemExist(line, boolListIsItemExist);
 
 			// check each candidate
-			for (int c = 0; c < listOfCurrentItemSets.size(); c++) {
-				match = true; // reset match to false
+			for (int j = 0; j < listOfCurrentItemSets.size(); j++) {
+				transactionIsMatchedWithCandidate = true; // reset match to true
+
 				// tokenize the candidate so that we know what items need to be
 				// present for a match
-				int[] cand = listOfCurrentItemSets.get(c);
-				// int[] cand = candidatesOptimized[c];
-				// check each item in the itemset to see if it is present in the
+				int[] candidate = listOfCurrentItemSets.get(j);
+
+				// check each item in the itemSet to see if it is present in the
 				// transaction
-				for (int xx : cand) {
-					if (trans[xx] == false) {
-						match = false;
+
+				// if it is not a match, filter the candidate
+				for (int item : candidate) {
+					if (boolListIsItemExist[item] == false) {
+						transactionIsMatchedWithCandidate = false;
 						break;
 					}
 				}
-				if (match) { // if at this point it is a match, increase the count
-					count[c]++;
-					// log(Arrays.toString(cand)+" is contained in trans "+i+" ("+line+")");
+				// if it is a match, increase the count
+				if (transactionIsMatchedWithCandidate) {
+					count[j]++;
 				}
 			}
 
 		}
 
 		data_in.close();
-
+		/*
+			Second part: see if the living candidates could satisfy the determined
+			minimum support. (default: 60%)
+		 */
 		for (int i = 0; i < listOfCurrentItemSets.size(); i++) {
 			// if the count% is larger than the minSup%, add to the candidate to
 			// the frequent candidates
@@ -271,8 +284,6 @@ public class ApAlgorithm {
 				foundFrequentItemSet(listOfCurrentItemSets.get(i), count[i]);
 				frequentCandidates.add(listOfCurrentItemSets.get(i));
 			}
-			// else log("-- Remove candidate: "+ Arrays.toString(candidates.get(i)) + " is:
-			// "+ ((count[i] / (double) numTransactions)));
 		}
 
 		// new candidates are only the frequent candidates
