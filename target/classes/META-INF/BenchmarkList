@@ -1,2 +1,3 @@
-JMH S 30 com.assignment.concurrent.main S 57 com.assignment.concurrent.jmh_generated.main_test_jmhTest S 4 test S 11 AverageTime E A 1 1 1 E E E E I 1 1 E E I 1 1 E E E E E E U 7 SECONDS E T 4 30 s 
-JMH S 30 com.assignment.sequential.main S 57 com.assignment.sequential.jmh_generated.main_test_jmhTest S 4 test S 11 AverageTime E A 1 1 1 E E E E I 1 1 E E I 1 1 E E E E E E U 7 SECONDS E T 4 30 s 
+JMH S 56 com.assignment.kmeansalgorithm.sequential.K_ClustererSeq S 83 com.assignment.kmeansalgorithm.sequential.jmh_generated.K_ClustererSeq_test_jmhTest S 4 test S 10 Throughput E A 1 1 1 E E E E I 1 1 E E I 1 1 E E E E E E U 7 SECONDS E T 4 30 s 
+JMH S 50 com.assignment.kmeansalgorithm.test.K_ClustererSeq S 77 com.assignment.kmeansalgorithm.test.jmh_generated.K_ClustererSeq_test_jmhTest S 4 test S 10 Throughput E A 1 1 1 E E E E I 1 1 E E I 1 1 E E E E E E U 7 SECONDS E T 4 30 s 
+JMH S 69 com.assignment.stackoverflow.concurrentreadfile.ReadFileBlockingQueue S 103 com.assignment.stackoverflow.concurrentreadfile.jmh_generated.ReadFileBlockingQueue_convertFile_jmhTest S 11 convertFile S 10 Throughput E A 1 1 1 E E E E I 1 1 E E I 1 1 E E E E E E U 7 SECONDS E T 4 30 s 

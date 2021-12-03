@@ -9,7 +9,7 @@ public class main {
 //    //Benchmark annotation
 //    @Benchmark
 //// Change benchmark test to throughput
-//    @BenchmarkMode(Mode.AverageTime)
+//    @BenchmarkMode(Mode.Throughput)
 //// Specifies the number of iteration
 //    @Measurement(iterations = 1)
 //    @Fork(1)

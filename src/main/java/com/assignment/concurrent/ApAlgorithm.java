@@ -1,11 +1,21 @@
 package com.assignment.concurrent;
 
+import com.assignment.DatFileConversion;
+
 import java.io.*;
+import java.nio.channels.FileChannel;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
+import static java.lang.Math.toIntExact;
 
 public class ApAlgorithm {
+
 	private List<int[]> listOfCurrentItemSets;
-	private String transactionFileName;
+	private String filePath;
 	private int totalNumOfDistinctItems;
 	private int totalNumOfTransactions;
 	private double minimumSupport;
@@ -15,13 +25,13 @@ public class ApAlgorithm {
 	// modified
 	private List<int[]> datFileCandidates;
 	long start;
+	private final int numOfCores = Runtime.getRuntime().availableProcessors();
 
 	/**
 	 * generates the apriori itemsets from a file
 	 * @throws Exception
 	 */
 	public ApAlgorithm() throws Exception {
-		// configuring the settings
 		start = System.currentTimeMillis();
 		configure();
 		go();
@@ -84,14 +94,19 @@ public class ApAlgorithm {
 	 * @throws Exception
 	 */
 	private void configure() throws Exception {
-		transactionFileName = "mushroom.dat";
+		filePath = "mushroom.dat";
 		minimumSupport = 0.6;
 		minimumConfidence = .8;
 		// initialize total number of distinct items and
 		totalNumOfDistinctItems = 0;
 		// total number of transactions
 		totalNumOfTransactions = 0;
-		datFileCandidates = convertDatFileToTransactionsList(new ArrayList<>(), transactionFileName);
+		ReadFileNIO readFileUsingNIO = new ReadFileNIO(filePath);
+
+		datFileCandidates = readFileUsingNIO.convertFile();
+		// encapsulation
+		totalNumOfTransactions = readFileUsingNIO.getTotalNumOfTransactions();
+		totalNumOfDistinctItems = readFileUsingNIO.getTotalNumOfDistinctItems();
 //		BufferedReader data_in = new BufferedReader(new FileReader(transactionFileName));
 //		while (data_in.ready()) {
 //			String line = data_in.readLine();
@@ -195,22 +210,6 @@ public class ApAlgorithm {
 
 	}
 
-	/* put "true" in boolListIsItemExist[i] if the integer i is inside the line */
-	/*
-	If the item is existed, then the element will become true
-	else if the item is not exist, then the element will become false
-//	 */
-//	private boolean[] identifyIsItemExist(String line, boolean[] boolListIsItemExist) {
-//		Arrays.fill(boolListIsItemExist, false);
-//		StringTokenizer stringTokenizer = new StringTokenizer(line, " "); // read a line from the file to the tokenizer
-//		// put the line contents into the transaction array
-//		while (stringTokenizer.hasMoreTokens()) {
-//			int parsedVal = Integer.parseInt(stringTokenizer.nextToken());
-//			boolListIsItemExist[parsedVal] = true; // if it is not a 0, assign the value to true
-//		}
-//		return boolListIsItemExist;
-//	}
-
 	private boolean[] identifyIsItemExist(int[] transaction, boolean[] boolListIsItemExist) {
 		Arrays.fill(boolListIsItemExist,false);
 		for(int element : transaction) {
@@ -238,7 +237,7 @@ public class ApAlgorithm {
 		boolean transactionIsMatchedWithCandidate;
 
 		// the number of successful matches, initialized by zeros
-		int count[] = new int[listOfCurrentItemSets.size()];
+		int[] count = new int[listOfCurrentItemSets.size()];
 
 		boolean[] boolListIsItemExist = new boolean[totalNumOfDistinctItems];
 
@@ -252,7 +251,7 @@ public class ApAlgorithm {
 		idea: split the iteration of totalNumOfTransactions to different threads to process
 		 */
 		for (int i = 0; i < totalNumOfTransactions; i++) {
-			//System.out.println("RICHARD " + Arrays.toString(datFileCandidates.get(i)) + i + " time");
+			// identify whether the item exists in that transaction, true or false.
 			boolListIsItemExist = identifyIsItemExist(datFileCandidates.get(i), boolListIsItemExist);
 
 			// check each candidate
@@ -361,38 +360,53 @@ public class ApAlgorithm {
 		}
 		return 0;
 	}
+	/*
+	the modified version will need us to read the file in parallel
+	and store it into an array list with integer array format
+	which holds a continuous sequence of itemSets
+	in order to do a priori process.
+	the thread pool type that is used is newFixedThreadPool,
+	however the experiment could run in different types of thread pools
+	Pool size: 1,2,4,8,16,32
+	 */
+	public void convertFileToTransactionsList() throws IOException, ExecutionException, InterruptedException {
+		FileInputStream fileInputStream = new FileInputStream("mushroom.dat");
+		FileChannel channel = fileInputStream.getChannel();
+		long remainingSize = channel.size();
+		long fileChunkSize = remainingSize / numOfCores;
 
-	public List<int[]> convertDatFileToTransactionsList(List<int[]> frequentSets, String transactionFileName)
-			throws FileNotFoundException {
-		Scanner file = new Scanner(new File(transactionFileName));
-		int[] newRay = null;
-		/*
-		has two jobs, one is to grab the data from .dat file
-		to ArrayList for faster I/O
-		2. to calculate the distinct frequent sets
-		 */
-		while (file.hasNext()) {
-			String line = file.nextLine();
-			String[] str = line.split("\\s+");
-			newRay = new int[str.length];
-			for (int i = 0; i < str.length; i++) {
-				newRay[i] = Integer.valueOf(str[i]);
-			}
-			frequentSets.add(newRay);
-			totalNumOfTransactions++;
+		// create a thread pool based on the number of cores
+		ExecutorService executor = Executors.newFixedThreadPool(numOfCores);
+
+		// indicates the file pointer
+		long startLoc = 0;
+		List<Future<String>> returnedFutureList = new ArrayList<>();
+		System.out.println("1. this section has been run!");
+		while(remainingSize >= fileChunkSize) {
+			// distribute task to a new thread
+			ReadFileAsync processFileChunk = new ReadFileAsync(channel,startLoc,toIntExact(fileChunkSize),0);
+			Future<String> returnedFuture = executor.submit(processFileChunk);
+			returnedFutureList.add(returnedFuture);
+			remainingSize = startLoc - fileChunkSize;
+			startLoc = startLoc + fileChunkSize;
 		}
-//		while (t.hasMoreTokens()) {
-//			int x = Integer.parseInt(t.nextToken());
-//			if (x + 1 > totalNumOfDistinctItems)
-//				totalNumOfDistinctItems = x + 1;
-//		}
-		for(int[] candidate : frequentSets) {
-			for(int element : candidate) {
-				if (element + 1 > totalNumOfDistinctItems) {
-					totalNumOfDistinctItems = element + 1;
-				}
-			}
+		System.out.println("2. this section has been run!");
+		// remaining file chunk
+		Future <String> returnedFuture = executor.submit(new ReadFileAsync(channel, startLoc,toIntExact(remainingSize),0));
+		returnedFutureList.add(returnedFuture);
+//		// executor will wait all threads to shut down
+//		executor.shutdown();
+		// wait for all threads to finish their tasks
+		System.out.println("3. this section has been run!");
+		while(!executor.isTerminated()) {
+
 		}
-		return frequentSets;
+		System.out.println("4. this section has been run!");
+		fileInputStream.close();
+		StringBuilder processedString = new StringBuilder();
+		for(Future<String> futureString : returnedFutureList) {
+			System.out.println(futureString.get());
+			Thread.sleep(1000);
+		}
 	}
 }
