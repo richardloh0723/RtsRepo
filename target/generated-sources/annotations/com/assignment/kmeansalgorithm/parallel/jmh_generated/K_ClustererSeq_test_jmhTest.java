@@ -1,4 +1,4 @@
-package com.assignment.stackoverflow.concurrentreadfile.jmh_generated;
+package com.assignment.kmeansalgorithm.parallel.jmh_generated;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -32,8 +32,8 @@ import org.openjdk.jmh.results.ScalarResult;
 import org.openjdk.jmh.results.AggregationPolicy;
 import org.openjdk.jmh.runner.FailureAssistException;
 
-import com.assignment.stackoverflow.concurrentreadfile.jmh_generated.ReadFileBlockingQueue_jmhType;
-public final class ReadFileBlockingQueue_convertFile_jmhTest {
+import com.assignment.kmeansalgorithm.parallel.jmh_generated.K_ClustererSeq_jmhType;
+public final class K_ClustererSeq_test_jmhTest {
 
     byte p000, p001, p002, p003, p004, p005, p006, p007, p008, p009, p010, p011, p012, p013, p014, p015;
     byte p016, p017, p018, p019, p020, p021, p022, p023, p024, p025, p026, p027, p028, p029, p030, p031;
@@ -58,7 +58,7 @@ public final class ReadFileBlockingQueue_convertFile_jmhTest {
     Blackhole blackhole;
     Control notifyControl;
 
-    public BenchmarkTaskResult convertFile_Throughput(InfraControl control, ThreadParams threadParams) throws Throwable {
+    public BenchmarkTaskResult test_Throughput(InfraControl control, ThreadParams threadParams) throws Throwable {
         this.benchmarkParams = control.benchmarkParams;
         this.iterationParams = control.iterationParams;
         this.threadParams    = threadParams;
@@ -68,24 +68,24 @@ public final class ReadFileBlockingQueue_convertFile_jmhTest {
         }
         if (threadParams.getSubgroupIndex() == 0) {
             RawResults res = new RawResults();
-            ReadFileBlockingQueue_jmhType l_readfileblockingqueue0_0 = _jmh_tryInit_f_readfileblockingqueue0_0(control);
+            K_ClustererSeq_jmhType l_k_clustererseq0_0 = _jmh_tryInit_f_k_clustererseq0_0(control);
 
             control.preSetup();
 
 
             control.announceWarmupReady();
             while (control.warmupShouldWait) {
-                blackhole.consume(l_readfileblockingqueue0_0.convertFile());
+                l_k_clustererseq0_0.test();
                 res.allOps++;
             }
 
             notifyControl.startMeasurement = true;
-            convertFile_thrpt_jmhStub(control, res, benchmarkParams, iterationParams, threadParams, blackhole, notifyControl, startRndMask, l_readfileblockingqueue0_0);
+            test_thrpt_jmhStub(control, res, benchmarkParams, iterationParams, threadParams, blackhole, notifyControl, startRndMask, l_k_clustererseq0_0);
             notifyControl.stopMeasurement = true;
             control.announceWarmdownReady();
             try {
                 while (control.warmdownShouldWait) {
-                    blackhole.consume(l_readfileblockingqueue0_0.convertFile());
+                    l_k_clustererseq0_0.test();
                     res.allOps++;
                 }
                 control.preTearDown();
@@ -94,7 +94,7 @@ public final class ReadFileBlockingQueue_convertFile_jmhTest {
             }
 
             if (control.isLastIteration()) {
-                f_readfileblockingqueue0_0 = null;
+                f_k_clustererseq0_0 = null;
             }
             res.allOps += res.measuredOps;
             int batchSize = iterationParams.getBatchSize();
@@ -104,19 +104,19 @@ public final class ReadFileBlockingQueue_convertFile_jmhTest {
             res.measuredOps *= opsPerInv;
             res.measuredOps /= batchSize;
             BenchmarkTaskResult results = new BenchmarkTaskResult((long)res.allOps, (long)res.measuredOps);
-            results.add(new ThroughputResult(ResultRole.PRIMARY, "convertFile", res.measuredOps, res.getTime(), benchmarkParams.getTimeUnit()));
+            results.add(new ThroughputResult(ResultRole.PRIMARY, "test", res.measuredOps, res.getTime(), benchmarkParams.getTimeUnit()));
             this.blackhole.evaporate("Yes, I am Stephen Hawking, and know a thing or two about black holes.");
             return results;
         } else
             throw new IllegalStateException("Harness failed to distribute threads among groups properly");
     }
 
-    public static void convertFile_thrpt_jmhStub(InfraControl control, RawResults result, BenchmarkParams benchmarkParams, IterationParams iterationParams, ThreadParams threadParams, Blackhole blackhole, Control notifyControl, int startRndMask, ReadFileBlockingQueue_jmhType l_readfileblockingqueue0_0) throws Throwable {
+    public static void test_thrpt_jmhStub(InfraControl control, RawResults result, BenchmarkParams benchmarkParams, IterationParams iterationParams, ThreadParams threadParams, Blackhole blackhole, Control notifyControl, int startRndMask, K_ClustererSeq_jmhType l_k_clustererseq0_0) throws Throwable {
         long operations = 0;
         long realTime = 0;
         result.startTime = System.nanoTime();
         do {
-            blackhole.consume(l_readfileblockingqueue0_0.convertFile());
+            l_k_clustererseq0_0.test();
             operations++;
         } while(!control.isDone);
         result.stopTime = System.nanoTime();
@@ -125,7 +125,7 @@ public final class ReadFileBlockingQueue_convertFile_jmhTest {
     }
 
 
-    public BenchmarkTaskResult convertFile_AverageTime(InfraControl control, ThreadParams threadParams) throws Throwable {
+    public BenchmarkTaskResult test_AverageTime(InfraControl control, ThreadParams threadParams) throws Throwable {
         this.benchmarkParams = control.benchmarkParams;
         this.iterationParams = control.iterationParams;
         this.threadParams    = threadParams;
@@ -135,24 +135,24 @@ public final class ReadFileBlockingQueue_convertFile_jmhTest {
         }
         if (threadParams.getSubgroupIndex() == 0) {
             RawResults res = new RawResults();
-            ReadFileBlockingQueue_jmhType l_readfileblockingqueue0_0 = _jmh_tryInit_f_readfileblockingqueue0_0(control);
+            K_ClustererSeq_jmhType l_k_clustererseq0_0 = _jmh_tryInit_f_k_clustererseq0_0(control);
 
             control.preSetup();
 
 
             control.announceWarmupReady();
             while (control.warmupShouldWait) {
-                blackhole.consume(l_readfileblockingqueue0_0.convertFile());
+                l_k_clustererseq0_0.test();
                 res.allOps++;
             }
 
             notifyControl.startMeasurement = true;
-            convertFile_avgt_jmhStub(control, res, benchmarkParams, iterationParams, threadParams, blackhole, notifyControl, startRndMask, l_readfileblockingqueue0_0);
+            test_avgt_jmhStub(control, res, benchmarkParams, iterationParams, threadParams, blackhole, notifyControl, startRndMask, l_k_clustererseq0_0);
             notifyControl.stopMeasurement = true;
             control.announceWarmdownReady();
             try {
                 while (control.warmdownShouldWait) {
-                    blackhole.consume(l_readfileblockingqueue0_0.convertFile());
+                    l_k_clustererseq0_0.test();
                     res.allOps++;
                 }
                 control.preTearDown();
@@ -161,7 +161,7 @@ public final class ReadFileBlockingQueue_convertFile_jmhTest {
             }
 
             if (control.isLastIteration()) {
-                f_readfileblockingqueue0_0 = null;
+                f_k_clustererseq0_0 = null;
             }
             res.allOps += res.measuredOps;
             int batchSize = iterationParams.getBatchSize();
@@ -171,19 +171,19 @@ public final class ReadFileBlockingQueue_convertFile_jmhTest {
             res.measuredOps *= opsPerInv;
             res.measuredOps /= batchSize;
             BenchmarkTaskResult results = new BenchmarkTaskResult((long)res.allOps, (long)res.measuredOps);
-            results.add(new AverageTimeResult(ResultRole.PRIMARY, "convertFile", res.measuredOps, res.getTime(), benchmarkParams.getTimeUnit()));
+            results.add(new AverageTimeResult(ResultRole.PRIMARY, "test", res.measuredOps, res.getTime(), benchmarkParams.getTimeUnit()));
             this.blackhole.evaporate("Yes, I am Stephen Hawking, and know a thing or two about black holes.");
             return results;
         } else
             throw new IllegalStateException("Harness failed to distribute threads among groups properly");
     }
 
-    public static void convertFile_avgt_jmhStub(InfraControl control, RawResults result, BenchmarkParams benchmarkParams, IterationParams iterationParams, ThreadParams threadParams, Blackhole blackhole, Control notifyControl, int startRndMask, ReadFileBlockingQueue_jmhType l_readfileblockingqueue0_0) throws Throwable {
+    public static void test_avgt_jmhStub(InfraControl control, RawResults result, BenchmarkParams benchmarkParams, IterationParams iterationParams, ThreadParams threadParams, Blackhole blackhole, Control notifyControl, int startRndMask, K_ClustererSeq_jmhType l_k_clustererseq0_0) throws Throwable {
         long operations = 0;
         long realTime = 0;
         result.startTime = System.nanoTime();
         do {
-            blackhole.consume(l_readfileblockingqueue0_0.convertFile());
+            l_k_clustererseq0_0.test();
             operations++;
         } while(!control.isDone);
         result.stopTime = System.nanoTime();
@@ -192,7 +192,7 @@ public final class ReadFileBlockingQueue_convertFile_jmhTest {
     }
 
 
-    public BenchmarkTaskResult convertFile_SampleTime(InfraControl control, ThreadParams threadParams) throws Throwable {
+    public BenchmarkTaskResult test_SampleTime(InfraControl control, ThreadParams threadParams) throws Throwable {
         this.benchmarkParams = control.benchmarkParams;
         this.iterationParams = control.iterationParams;
         this.threadParams    = threadParams;
@@ -202,14 +202,14 @@ public final class ReadFileBlockingQueue_convertFile_jmhTest {
         }
         if (threadParams.getSubgroupIndex() == 0) {
             RawResults res = new RawResults();
-            ReadFileBlockingQueue_jmhType l_readfileblockingqueue0_0 = _jmh_tryInit_f_readfileblockingqueue0_0(control);
+            K_ClustererSeq_jmhType l_k_clustererseq0_0 = _jmh_tryInit_f_k_clustererseq0_0(control);
 
             control.preSetup();
 
 
             control.announceWarmupReady();
             while (control.warmupShouldWait) {
-                blackhole.consume(l_readfileblockingqueue0_0.convertFile());
+                l_k_clustererseq0_0.test();
                 res.allOps++;
             }
 
@@ -218,12 +218,12 @@ public final class ReadFileBlockingQueue_convertFile_jmhTest {
             int batchSize = iterationParams.getBatchSize();
             int opsPerInv = benchmarkParams.getOpsPerInvocation();
             SampleBuffer buffer = new SampleBuffer();
-            convertFile_sample_jmhStub(control, res, benchmarkParams, iterationParams, threadParams, blackhole, notifyControl, startRndMask, buffer, targetSamples, opsPerInv, batchSize, l_readfileblockingqueue0_0);
+            test_sample_jmhStub(control, res, benchmarkParams, iterationParams, threadParams, blackhole, notifyControl, startRndMask, buffer, targetSamples, opsPerInv, batchSize, l_k_clustererseq0_0);
             notifyControl.stopMeasurement = true;
             control.announceWarmdownReady();
             try {
                 while (control.warmdownShouldWait) {
-                    blackhole.consume(l_readfileblockingqueue0_0.convertFile());
+                    l_k_clustererseq0_0.test();
                     res.allOps++;
                 }
                 control.preTearDown();
@@ -232,21 +232,21 @@ public final class ReadFileBlockingQueue_convertFile_jmhTest {
             }
 
             if (control.isLastIteration()) {
-                f_readfileblockingqueue0_0 = null;
+                f_k_clustererseq0_0 = null;
             }
             res.allOps += res.measuredOps * batchSize;
             res.allOps *= opsPerInv;
             res.allOps /= batchSize;
             res.measuredOps *= opsPerInv;
             BenchmarkTaskResult results = new BenchmarkTaskResult((long)res.allOps, (long)res.measuredOps);
-            results.add(new SampleTimeResult(ResultRole.PRIMARY, "convertFile", buffer, benchmarkParams.getTimeUnit()));
+            results.add(new SampleTimeResult(ResultRole.PRIMARY, "test", buffer, benchmarkParams.getTimeUnit()));
             this.blackhole.evaporate("Yes, I am Stephen Hawking, and know a thing or two about black holes.");
             return results;
         } else
             throw new IllegalStateException("Harness failed to distribute threads among groups properly");
     }
 
-    public static void convertFile_sample_jmhStub(InfraControl control, RawResults result, BenchmarkParams benchmarkParams, IterationParams iterationParams, ThreadParams threadParams, Blackhole blackhole, Control notifyControl, int startRndMask, SampleBuffer buffer, int targetSamples, long opsPerInv, int batchSize, ReadFileBlockingQueue_jmhType l_readfileblockingqueue0_0) throws Throwable {
+    public static void test_sample_jmhStub(InfraControl control, RawResults result, BenchmarkParams benchmarkParams, IterationParams iterationParams, ThreadParams threadParams, Blackhole blackhole, Control notifyControl, int startRndMask, SampleBuffer buffer, int targetSamples, long opsPerInv, int batchSize, K_ClustererSeq_jmhType l_k_clustererseq0_0) throws Throwable {
         long realTime = 0;
         long operations = 0;
         int rnd = (int)System.nanoTime();
@@ -261,7 +261,7 @@ public final class ReadFileBlockingQueue_convertFile_jmhTest {
             }
             for (int b = 0; b < batchSize; b++) {
                 if (control.volatileSpoiler) return;
-                blackhole.consume(l_readfileblockingqueue0_0.convertFile());
+                l_k_clustererseq0_0.test();
             }
             if (sample) {
                 buffer.add((System.nanoTime() - time) / opsPerInv);
@@ -279,7 +279,7 @@ public final class ReadFileBlockingQueue_convertFile_jmhTest {
     }
 
 
-    public BenchmarkTaskResult convertFile_SingleShotTime(InfraControl control, ThreadParams threadParams) throws Throwable {
+    public BenchmarkTaskResult test_SingleShotTime(InfraControl control, ThreadParams threadParams) throws Throwable {
         this.benchmarkParams = control.benchmarkParams;
         this.iterationParams = control.iterationParams;
         this.threadParams    = threadParams;
@@ -288,7 +288,7 @@ public final class ReadFileBlockingQueue_convertFile_jmhTest {
             this.blackhole = new Blackhole("Today's password is swordfish. I understand instantiating Blackholes directly is dangerous.");
         }
         if (threadParams.getSubgroupIndex() == 0) {
-            ReadFileBlockingQueue_jmhType l_readfileblockingqueue0_0 = _jmh_tryInit_f_readfileblockingqueue0_0(control);
+            K_ClustererSeq_jmhType l_k_clustererseq0_0 = _jmh_tryInit_f_k_clustererseq0_0(control);
 
             control.preSetup();
 
@@ -296,42 +296,42 @@ public final class ReadFileBlockingQueue_convertFile_jmhTest {
             notifyControl.startMeasurement = true;
             RawResults res = new RawResults();
             int batchSize = iterationParams.getBatchSize();
-            convertFile_ss_jmhStub(control, res, benchmarkParams, iterationParams, threadParams, blackhole, notifyControl, startRndMask, batchSize, l_readfileblockingqueue0_0);
+            test_ss_jmhStub(control, res, benchmarkParams, iterationParams, threadParams, blackhole, notifyControl, startRndMask, batchSize, l_k_clustererseq0_0);
             control.preTearDown();
 
             if (control.isLastIteration()) {
-                f_readfileblockingqueue0_0 = null;
+                f_k_clustererseq0_0 = null;
             }
             int opsPerInv = control.benchmarkParams.getOpsPerInvocation();
             long totalOps = opsPerInv;
             BenchmarkTaskResult results = new BenchmarkTaskResult(totalOps, totalOps);
-            results.add(new SingleShotResult(ResultRole.PRIMARY, "convertFile", res.getTime(), benchmarkParams.getTimeUnit()));
+            results.add(new SingleShotResult(ResultRole.PRIMARY, "test", res.getTime(), benchmarkParams.getTimeUnit()));
             this.blackhole.evaporate("Yes, I am Stephen Hawking, and know a thing or two about black holes.");
             return results;
         } else
             throw new IllegalStateException("Harness failed to distribute threads among groups properly");
     }
 
-    public static void convertFile_ss_jmhStub(InfraControl control, RawResults result, BenchmarkParams benchmarkParams, IterationParams iterationParams, ThreadParams threadParams, Blackhole blackhole, Control notifyControl, int startRndMask, int batchSize, ReadFileBlockingQueue_jmhType l_readfileblockingqueue0_0) throws Throwable {
+    public static void test_ss_jmhStub(InfraControl control, RawResults result, BenchmarkParams benchmarkParams, IterationParams iterationParams, ThreadParams threadParams, Blackhole blackhole, Control notifyControl, int startRndMask, int batchSize, K_ClustererSeq_jmhType l_k_clustererseq0_0) throws Throwable {
         long realTime = 0;
         result.startTime = System.nanoTime();
         for (int b = 0; b < batchSize; b++) {
             if (control.volatileSpoiler) return;
-            blackhole.consume(l_readfileblockingqueue0_0.convertFile());
+            l_k_clustererseq0_0.test();
         }
         result.stopTime = System.nanoTime();
         result.realTime = realTime;
     }
 
     
-    ReadFileBlockingQueue_jmhType f_readfileblockingqueue0_0;
+    K_ClustererSeq_jmhType f_k_clustererseq0_0;
     
-    ReadFileBlockingQueue_jmhType _jmh_tryInit_f_readfileblockingqueue0_0(InfraControl control) throws Throwable {
+    K_ClustererSeq_jmhType _jmh_tryInit_f_k_clustererseq0_0(InfraControl control) throws Throwable {
         if (control.isFailing) throw new FailureAssistException();
-        ReadFileBlockingQueue_jmhType val = f_readfileblockingqueue0_0;
+        K_ClustererSeq_jmhType val = f_k_clustererseq0_0;
         if (val == null) {
-            val = new ReadFileBlockingQueue_jmhType();
-            f_readfileblockingqueue0_0 = val;
+            val = new K_ClustererSeq_jmhType();
+            f_k_clustererseq0_0 = val;
         }
         return val;
     }

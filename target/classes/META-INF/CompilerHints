@@ -4,5 +4,3 @@ dontinline,*.*_sample_jmhStub
 dontinline,*.*_ss_jmhStub
 dontinline,*.*_thrpt_jmhStub
 inline,com/assignment/kmeansalgorithm/sequential/K_ClustererSeq.test
-inline,com/assignment/kmeansalgorithm/test/K_ClustererSeq.test
-inline,com/assignment/stackoverflow/concurrentreadfile/ReadFileBlockingQueue.convertFile

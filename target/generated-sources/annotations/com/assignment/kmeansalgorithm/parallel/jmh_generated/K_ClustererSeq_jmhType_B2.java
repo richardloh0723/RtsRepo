@@ -1,4 +1,4 @@
-package com.assignment.kmeansalgorithm.test.jmh_generated;
+package com.assignment.kmeansalgorithm.parallel.jmh_generated;
 import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
 public class K_ClustererSeq_jmhType_B2 extends K_ClustererSeq_jmhType_B1 {
     public volatile int setupTrialMutex;

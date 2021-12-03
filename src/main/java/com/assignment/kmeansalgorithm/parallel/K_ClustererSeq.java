@@ -1,4 +1,4 @@
-package com.assignment.kmeansalgorithm.test;/*
+package com.assignment.kmeansalgorithm.parallel;/*
  * Programmed by Shephalika Shekhar
  * Class for Kmeans Clustering implemetation
  */
@@ -13,16 +13,16 @@ import java.util.Map;
 import java.util.concurrent.*;
 
 public class K_ClustererSeq {
-//	    @Benchmark
-//// Change benchmark test to throughput
-//    @BenchmarkMode(Mode.Throughput)
-//// Specifies the number of iteration
-//    @Measurement(iterations = 1)
-//    @Fork(1)
-//    @Timeout(time = 30)
-//    @OutputTimeUnit(TimeUnit.SECONDS)
-//	public void test() throws Exception {
-	public static void main(String args[]) throws IOException, ExecutionException, InterruptedException {
+	@Benchmark
+// Change benchmark test to throughput
+	@BenchmarkMode(Mode.AverageTime)
+// Specifies the number of iteration
+	@Measurement(iterations = 1)
+	@Fork(1)
+	@Timeout(time = 30)
+	@OutputTimeUnit(TimeUnit.SECONDS)
+	public void test() throws Exception {
+	//public static void main(String args[]) throws IOException, ExecutionException, InterruptedException {
 		ReadDatasetSeq r1 = new ReadDatasetSeq();
 		List<double[]> features = r1.getFeatures();
 		features.clear();
@@ -32,7 +32,6 @@ public class K_ClustererSeq {
 
 		int ex=1;
 		int k = 5;
-		int max_iterations = 100;
 		int distance = 1;
 
 		// Hashmap to store centroids with index
@@ -45,42 +44,50 @@ public class K_ClustererSeq {
 			centroids.put(i, x1);
 		}
 		//Hashmap for finding cluster indexes
-		Map<double[], Integer> clusters = new HashMap<>();
+		Map<double[], Integer> clusters;
+		Map<double[], Integer> previousClusters = new HashMap<>();
+		//initialize the first cluster, can't use concurrency
 		clusters = kmeans(features, distance, centroids, k);
-		// initial cluster print
-		/*	for (double[] key : clusters.keySet()) {
-			for (int i = 0; i < key.length; i++) {
-				System.out.print(key[i] + ", ");
-			}
-			System.out.print(clusters.get(key) + "\n");
-		}
-		*/
 		double db[];
 
 		// reassigning to new clusters
 		// potential of parallel k-means clustering
 		// split tasks to different threads
+		int numOfCores = Runtime.getRuntime().availableProcessors();
 		ExecutorService executors = Executors.newSingleThreadExecutor();
 		List<Future<Map<double[],Integer>>> futureResults = new ArrayList<>();
-		for (int i = 0; i < max_iterations; i++) {
+		int start = 0;
+		int end = 0;
+		boolean clusterNotChanged = false;
+		int iterationCount = 0;
+		while(!clusterNotChanged) {
 			for (int j = 0; j < k; j++) {
 				List<double[]> list = new ArrayList<>();
 				for (double[] key : clusters.keySet()) {
-					if (clusters.get(key)==j) {
+					if (clusters.get(key) == j) {
 						list.add(key);
 					}
-			}
+				}
 				db = centroidCalculator(list, r1);
 				centroids.put(j, db);
 			}
+			previousClusters.putAll(clusters);
 			clusters.clear();
-			Future<Map<double[], Integer>> futureResult = executors.submit(new Task(features,centroids,k));
-			futureResults.add(futureResult);
-
+			for (int coreId = 0; coreId < numOfCores; coreId++) {
+				int[] startEndArr = calculateStartEndIndex(numOfCores, coreId, features);
+				Future<Map<double[], Integer>> futureResult =
+						executors.submit(new Task(features, centroids, k, startEndArr[0], startEndArr[1]));
+				futureResults.add(futureResult);
+			}
 			//clusters = futureResult.get();
-			for(Future<Map<double[], Integer>> result : futureResults) {
+			for (Future<Map<double[], Integer>> result : futureResults) {
 				clusters.putAll(result.get());
 			}
+			if(clusters.equals(previousClusters)) {
+				clusterNotChanged = true;
+			}
+			previousClusters.clear();
+			iterationCount++;
 		}
 
 		executors.shutdown();
@@ -104,7 +111,7 @@ public class K_ClustererSeq {
 				if (clusters.get(key)==i) {
 					sse+=Math.pow(DistanceSeq.eucledianDistance(key, centroids.get(i)),2);
 				}
-				}
+			}
 			wcss+=sse;
 		}
 		String dis="";
@@ -113,7 +120,7 @@ public class K_ClustererSeq {
 		else
 			dis="Manhattan";
 		System.out.println("\n*********Programmed by Shephalika Shekhar************\n*********Results************\nDistance Metric: "+dis);
-		System.out.println("Iterations: "+max_iterations);
+		System.out.println("Iterations: "+ iterationCount);
 		System.out.println("Number of Clusters: "+k);
 		System.out.println("WCSS: "+wcss);
 	}
@@ -189,30 +196,50 @@ class Task implements Callable<Map<double[], Integer>> {
 	List<double[]> features;
 	Map<Integer, double[]> centroids;
 	int k;
+	int start;
+	int end;
 	@Override
 	public Map<double[], Integer> call() {
+//		Map<double[], Integer> clusters = new HashMap<>();
+//		int k1 = 0;
+//		double dist=0.0;
+//		for(double[] x:features) {
+//			double minimum = 999999.0;
+//			for (int j = 0; j < k; j++) {
+//				dist = DistanceSeq.eucledianDistance(centroids.get(j), x);
+//				if (dist < minimum) {
+//					minimum = dist;
+//					k1 = j;
+//				}
+//
+//			}
+//			clusters.put(x, k1);
+//		}
+//		return clusters;
 		Map<double[], Integer> clusters = new HashMap<>();
 		int k1 = 0;
-		double dist=0.0;
-		for(double[] x:features) {
+		double distance = 0.0;
+		for(int i = start; i < end; i++) {
 			double minimum = 999999.0;
-			for (int j = 0; j < k; j++) {
-				dist = DistanceSeq.eucledianDistance(centroids.get(j), x);
-				if (dist < minimum) {
-					minimum = dist;
+			for(int j = 0; j < k; j++) {
+				distance = DistanceSeq.eucledianDistance(centroids.get(j), features.get(i));
+				if(distance < minimum) {
+					minimum = distance;
 					k1 = j;
 				}
-
 			}
-			clusters.put(x, k1);
+			clusters.put(features.get(i),k1);
 		}
 		return clusters;
 	}
 
-	public Task(List<double[]> features, Map<Integer, double[]> centroids, int k) {
+	public Task(List<double[]> features, Map<Integer, double[]> centroids, int k,
+					int start, int end) {
 		this.features = features;
 		this.centroids = centroids;
 		this.k = k;
+		this.start = start;
+		this.end = end;
 	}
 
 }

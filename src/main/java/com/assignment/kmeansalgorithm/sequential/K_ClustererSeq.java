@@ -5,6 +5,7 @@ package com.assignment.kmeansalgorithm.sequential;/*
 
 import org.openjdk.jmh.annotations.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,9 +13,9 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class K_ClustererSeq {
-	    @Benchmark
+	@Benchmark
 // Change benchmark test to throughput
-    @BenchmarkMode(Mode.Throughput)
+    @BenchmarkMode(Mode.AverageTime)
 // Specifies the number of iteration
     @Measurement(iterations = 1)
     @Fork(1)
@@ -31,7 +32,6 @@ public class K_ClustererSeq {
 
 		int ex=1;
 		int k = 5;
-		int max_iterations = 100;
 		int distance = 1;
 
 		// Hashmap to store centroids with index
@@ -44,7 +44,7 @@ public class K_ClustererSeq {
 			centroids.put(i, x1);
 		}
 		//Hashmap for finding cluster indexes
-		Map<double[], Integer> clusters = new HashMap<>();
+		Map<double[], Integer> clusters;
 		clusters = kmeans(features, distance, centroids, k);
 		// initial cluster print
 		/*	for (double[] key : clusters.keySet()) {
@@ -55,11 +55,14 @@ public class K_ClustererSeq {
 		}
 		*/
 		double db[];
-
 		// reassigning to new clusters
 		// potential of parallel k-means clustering
 		// split tasks to different threads
-		for (int i = 0; i < max_iterations; i++) {
+		boolean clusterNotChanged = false;
+		int iterationCount = 0;
+		Map<double[], Integer> previousClusters = new HashMap<>();
+
+		while(!clusterNotChanged) {
 			for (int j = 0; j < k; j++) {
 				List<double[]> list = new ArrayList<>();
 				for (double[] key : clusters.keySet()) {
@@ -70,9 +73,14 @@ public class K_ClustererSeq {
 				db = centroidCalculator(list, r1);
 				centroids.put(j, db);
 			}
+			previousClusters.putAll(clusters);
 			clusters.clear();
 			clusters = kmeans(features,distance, centroids, k);
-			
+			if(clusters.equals(previousClusters)) {
+				clusterNotChanged = true;
+			}
+			previousClusters.clear();
+			iterationCount++;
 		}
 		
 		//final cluster print
@@ -103,7 +111,7 @@ public class K_ClustererSeq {
 		else
 			dis="Manhattan";
 		System.out.println("\n*********Programmed by Shephalika Shekhar************\n*********Results************\nDistance Metric: "+dis);
-		System.out.println("Iterations: "+max_iterations);
+		System.out.println("Iterations: "+ iterationCount);
 		System.out.println("Number of Clusters: "+k);
 		System.out.println("WCSS: "+wcss);
 	}

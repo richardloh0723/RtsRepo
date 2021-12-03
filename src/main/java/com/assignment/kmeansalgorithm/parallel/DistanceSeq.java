@@ -1,4 +1,4 @@
-package com.assignment.kmeansalgorithm.test;
+package com.assignment.kmeansalgorithm.parallel;
 
 /*
  * Programmed by Shephalika Shekhar
