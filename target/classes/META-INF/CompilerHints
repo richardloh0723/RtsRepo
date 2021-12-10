@@ -3,4 +3,5 @@ dontinline,*.*_avgt_jmhStub
 dontinline,*.*_sample_jmhStub
 dontinline,*.*_ss_jmhStub
 dontinline,*.*_thrpt_jmhStub
-inline,com/assignment/kmeansalgorithm/sequential/K_ClustererSeq.test
+inline,com/assignment/kmeansalgorithm/parallelcallableandrunnable/K_ClustererCallableAndRunnable.test
+inline,com/assignment/kmeansalgorithm/parallelrunnable/K_ClustererRunnable.test

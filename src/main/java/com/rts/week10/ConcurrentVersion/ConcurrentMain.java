@@ -34,8 +34,8 @@ public class ConcurrentMain {
 //	@Fork(1)
 //	@Timeout(time = 30)
 //	@OutputTimeUnit(TimeUnit.SECONDS)
-	public void test() throws IOException {
-	//public static void main(String[] args) throws IOException {
+	//public void test() throws IOException {
+	public static void main(String[] args) throws IOException {
 
 		Path pathVoc = Paths.get("data", "movies.words");
 		Map<String, Integer> vocIndex = VocabularyLoader.load(pathVoc);

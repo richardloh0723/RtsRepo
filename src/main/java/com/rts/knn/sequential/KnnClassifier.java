@@ -51,7 +51,7 @@ public class KnnClassifier {
 	 */
 	public String classify (Sample example) throws InterruptedException {
 		
-		Distance[] distances=new Distance[dataSet.size()];
+		Distance[] distances = new Distance[dataSet.size()];
 
 		// used to block when the for loop is running, like semaphore
 		// 1000 to 0
